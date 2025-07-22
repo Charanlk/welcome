@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="     http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd     http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd     http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd     http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+  <munit:config name="welcome_flow_8471.xml"/>
+  <munit:test name="welcome_flow_0" doc:id="9ce921d3-bb8f-4ba0-aab8-7d1cc9161938" description="Test the welcome-flow to ensure it responds with the correct welcome message when triggered via HTTP request.">
+    <!-- Behavior section: Sets up the initial state for the test. -->
+    <!-- It simulates an HTTP GET request to the /welcome endpoint with an empty payload. -->
+    <munit:behavior>
+      <munit:set-event doc:name="Set Event for welcome-flow" doc:id="b893a44c-48e2-4a42-a99e-d803c4866b32">
+        <munit:payload value="#[{}]" mediaType="application/json" encoding="UTF-8"/>
+        <munit:attributes value="#[{'method': 'GET', 'requestPath': '/welcome', 'queryParams': {}, 'headers': {'host': 'localhost', 'user-agent': 'MUnit-Test'}, 'listenerPath': '/welcome'}]"/>
+      </munit:set-event>
+    </munit:behavior>
+    <!-- Execution section: Runs the flow to be tested. -->
+    <munit:execution>
+      <flow-ref doc:name="Execute welcome-flow" doc:id="83ca0b37-cc66-426e-aa43-6513afc898d3" name="welcome-flow"/>
+    </munit:execution>
+    <!-- Validation section: Verifies the outcome of the flow execution. -->
+    <!-- It asserts that the payload is the expected welcome message and verifies that the Set Payload processor was called. -->
+    <munit:validation>
+      <munit-tools:assert-equals doc:name="Assert payload is welcome message" doc:id="ba2e6047-fc11-4698-afbc-8afa00dfc778" actual="#[payload]" expected="Welcome to Prowess, Hyderabad" message="The payload does not match the expected welcome message."/>
+      <munit-tools:verify-call doc:name="Verify Set Response Payload was called" doc:id="d171f151-3d75-49ea-ac2f-4d740195dfcb" processor="set-payload" times="1">
+        <munit-tools:with-attributes>
+          <munit-tools:with-attribute attributeName="doc:name" whereValue="Set Response Payload"/>
+        </munit-tools:with-attributes>
+      </munit-tools:verify-call>
+    </munit:validation>
+  </munit:test>
+</mule>
